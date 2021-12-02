@@ -22,7 +22,11 @@ function checksExistsUserAccount(req, res, next) {
 }
 
 function checksCreateTodosUserAvailability(req, res, next) {
-  // Complete aqui
+  const { user } = reqq
+
+  if (!user.pro && user.todos.length >= 10) return res.status(403).json({ error: 'You need to update to pro' })
+
+  next()
 }
 
 function checksTodoExists(req, res, next) {
