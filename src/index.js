@@ -30,7 +30,24 @@ function checksCreateTodosUserAvailability(req, res, next) {
 }
 
 function checksTodoExists(req, res, next) {
-  // Complete aqui
+  const { headers: { username }, params: { id } } = req
+
+  const isValidUuid = uuidValidate(id)
+
+  if (!isValidUuid) return res.status(400).json({ error: 'ID is invalid' })
+
+  userFound = users.find(user => user.username === username);
+
+  if (!userFound) return res.status(404).json({ error: 'User not found' })
+
+  todoFound = userFound.todos.find(todo => todo.id === id);
+
+  if (!todoFound) return res.status(404).json({ error: 'Todo not found' })
+
+  req.user = userFound
+  req.todo = todoFound
+
+  next()
 }
 
 function findUserById(req, res, next) {
